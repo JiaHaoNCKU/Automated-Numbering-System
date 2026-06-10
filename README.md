@@ -12,7 +12,7 @@ The automated pipeline consists of three Python scripts working sequentially:
 
 ┌──────────────┐-WAFER.json-┌────────────────────────┐-WAFER_numbered.json-┌──────────────┐
 
-│-Original-GDS-│-───────────►-│--Hybrid-Numbering-Core-│-───────────────────►-│-JSON-to-GDS--│-──►-Numbered-GDS
+│-Original-GDS-│-─────────►-│--Hybrid-Numbering-Core-│-──────────────────►-│-JSON-to-GDS--│-──►-Numbered-GDS
 -
 └──────────────┘------------└────────────────────────┘---------------------└──────────────┘
 gds_to_json.py---------------probe_hybrid_numbering.py--------------------json_to_gds.py
