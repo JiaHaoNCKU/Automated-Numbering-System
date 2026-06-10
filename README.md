@@ -8,15 +8,15 @@ An automated toolchain for processing and serial-numbering wafer layouts. It use
 
 The automated pipeline consists of three Python scripts working sequentially:
 
-[ Step 1 ]\t[ Step 2 ]                    [ Step 3 ]
+[ Step 1 ]---------------------[ Step 2 ]-------------------------------------[ Step 3 ]
 
-┌──────────────┐   WAFER.json  ┌────────────────────────┐ WAFER_numbered.json ┌──────────────┐
+┌──────────────┐-WAFER.json-┌────────────────────────┐-WAFER_numbered.json-┌──────────────┐
 
 │ Original GDS │ ───────────► │  Hybrid Numbering Core │ ───────────────────► │ JSON to GDS  │ ──► Numbered GDS
  
-└──────────────┘               └────────────────────────┘                     └──────────────┘
-gds_to_json.py                 probe_hybrid_numbering.py                      json_to_gds.py
-(ver. 1.1.4)                   (ver. 1.0.9)                                    (ver.1.3.2)
+└──────────────┘------------└────────────────────────┘---------------------└──────────────┘
+gds_to_json.py---------------probe_hybrid_numbering.py--------------------json_to_gds.py
+(ver. 1.1.4)-----------------(ver. 1.0.9)---------------------------------(ver.1.3.2)
 
 
 1. **`gds_to_json.py`**: Translates binary GDSII data into a structured, highly compatible JSON hierarchical tree dictionary.
