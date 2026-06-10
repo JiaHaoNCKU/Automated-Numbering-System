@@ -8,7 +8,7 @@ An automated toolchain for processing and serial-numbering wafer layouts. It use
 
 The automated pipeline consists of three Python scripts working sequentially:
 
-[ Step 1 ]                    [ Step 2 ]                    [ Step 3 ]
+[ Step 1 ]\t[ Step 2 ]                    [ Step 3 ]
 
 ┌──────────────┐   WAFER.json  ┌────────────────────────┐ WAFER_numbered.json ┌──────────────┐
 
