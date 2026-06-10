@@ -11,12 +11,10 @@ The automated pipeline consists of three Python scripts working sequentially:
 [-Step-1-]---------------------[-Step-2-]-------------------------------------[-Step-3-]
 
 ┌──────────────┐-WAFER.json-┌────────────────────────┐-WAFER_numbered.json-┌──────────────┐
-
 │-Original-GDS-│-─────────►-│--Hybrid-Numbering-Core-│-──────────────────►-│-JSON-to-GDS--│-──►-Numbered-GDS
--
 └──────────────┘------------└────────────────────────┘---------------------└──────────────┘
-gds_to_json.py---------------probe_hybrid_numbering.py--------------------json_to_gds.py
-(ver.-1.1.4)-----------------(ver.-1.0.9)---------------------------------(ver.1.3.2)
+gds_to_json.py--------------probe_hybrid_numbering.py----------------------json_to_gds.py
+(ver.-1.1.4)----------------(ver.-1.0.9)-----------------------------------(ver.1.3.2)
 
 
 1. **`gds_to_json.py`**: Translates binary GDSII data into a structured, highly compatible JSON hierarchical tree dictionary.
@@ -77,9 +75,9 @@ Dependencies: `gdspy`, `klayout` (Python module `pya`), `numpy`, `matplotlib`.
 ### 2. Running the Pipeline
 Execute the scripts in this exact order:
 ```bash
-runfile('gds_to_json.py')           # Step 1: Parse & screen GDS to JSON
+runfile('gds_to_json.py')            # Step 1: Parse & screen GDS to JSON
 runfile('probe_hybrid_numbering.py') # Step 2: Purge placeholders & inject numbers
-runfile('json_to_gds.py')           # Step 3: Rebuild JSON back to standard GDSII
+runfile('json_to_gds.py')            # Step 3: Rebuild JSON back to standard GDSII
 ```
 
 ### 3. Layer Configuration Maps
