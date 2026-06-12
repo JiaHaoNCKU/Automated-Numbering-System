@@ -74,6 +74,6 @@ if __name__ == "__main__":
     layer_mapping = {"default": (100, 0)}
     # 🔥 Configured to use localized relative paths within the project structure
     input_file = r"../json/WAFER_numbered.json"
-    output_file = r"../example/WAFER_numbered.gds"
+    output_file = r"../example/WAFER_numbered2.gds"
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     convert_json_to_gds(input_file, output_file, layer_mapping, top_cell_name="TOP")

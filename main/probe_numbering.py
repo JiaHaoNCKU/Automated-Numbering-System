@@ -90,19 +90,22 @@ def collect_layer_shapes_recursive(definition, target_layer_num, keys_to_delete=
                 
     return results
 
-def get_digit_polygons(digit, center, size=10.0):
+def get_digit_polygons(digit, center, size=10.0, gap=0.0):
     x, y = center
     w, h = size * 0.6, size
-    r = size * 0.12
+    t = size * 0.12  # Thickness of the digital segments
+    
+    # Define segments with an adjustable gap parameter (gap=0.0 means perfectly connected/overlapping)
     segments = {
-        'a': np.array([[r, h-r], [w-r, h-r], [w-r, h], [r, h]]),
-        'b': np.array([[w-r, h/2+r/2], [w, h/2+r/2], [w, h-r], [w-r, h-r]]),
-        'c': np.array([[w-r, r], [w, r], [w, h/2-r/2], [w-r, h/2-r/2]]),
-        'd': np.array([[r, 0], [w-r, 0], [w-r, r], [r, r]]),
-        'e': np.array([[0, r], [r, r], [r, h/2-r/2], [0, h/2-r/2]]),
-        'f': np.array([[0, h/2+r/2], [r, h/2+r/2], [r, h-r], [0, h-r]]),
-        'g': np.array([[r, h/2-r/2], [w-r, h/2-r/2], [w-r, h/2+r/2], [r, h/2+r/2]])
+        'a': np.array([[gap, h - t], [w - gap, h - t], [w - gap, h], [gap, h]]),
+        'b': np.array([[w - t, h / 2 + gap], [w, h / 2 + gap], [w, h - gap], [w - t, h - gap]]),
+        'c': np.array([[w - t, gap], [w, gap], [w, h / 2 - gap], [w - t, h / 2 - gap]]),
+        'd': np.array([[gap, 0], [w - gap, 0], [w - gap, t], [gap, t]]),
+        'e': np.array([[0, gap], [t, gap], [t, h / 2 - gap], [0, h / 2 - gap]]),
+        'f': np.array([[0, h / 2 + gap], [t, h / 2 + gap], [t, h - gap], [0, h - gap]]),
+        'g': np.array([[gap, h / 2 - t / 2], [w - gap, h / 2 - t / 2], [w - gap, h / 2 + t / 2], [gap, h / 2 + t / 2]])
     }
+    
     digit_map = {
         '0': ['a', 'b', 'c', 'd', 'e', 'f'], '1': ['b', 'c'],
         '2': ['a', 'b', 'g', 'e', 'd'],       '3': ['a', 'b', 'g', 'c', 'd'],
@@ -110,9 +113,10 @@ def get_digit_polygons(digit, center, size=10.0):
         '6': ['a', 'f', 'e', 'd', 'c', 'g'],   '7': ['a', 'b', 'c'],
         '8': ['a', 'b', 'c', 'd', 'e', 'f', 'g'], '9': ['a', 'b', 'c', 'd', 'f', 'g']
     }
+    
     polygons = []
     for seg_key in digit_map.get(str(digit), []):
-        poly = segments[seg_key] - np.array([w/2, h/2]) + np.array([x, y])
+        poly = segments[seg_key] - np.array([w / 2, h / 2]) + np.array([x, y])
         polygons.append(poly.tolist())
     return polygons
 
@@ -257,7 +261,7 @@ def process_hybrid_wafer_numbering(json_path, output_json_path):
     print("🎉 Hybrid positioning automated numbering completed successfully.")
 
 if __name__ == "__main__":
-    in_wafer_json = "../json/WAFER.json"
+    in_wafer_json = "../json/WAFER_optimized.json"
     out_wafer_json = "../json/WAFER_numbered.json"
     if os.path.exists(in_wafer_json):
         process_hybrid_wafer_numbering(in_wafer_json, out_wafer_json)
