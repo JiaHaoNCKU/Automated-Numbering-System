@@ -1,93 +1,85 @@
-# Wafer-Level Probe Automated Hybrid Numbering System
+# Automated Wafer Numbering System (ver. 1.9.0)
 
-An automated toolchain for processing and serial-numbering wafer layouts. It uses **Layer 81** for probe type classification and replaces **Layer 100** placeholders with auto-scaled, angle-aligned physical polygon serial numbers directly inside the top-level `WAFER` cell.
-
----
-
-## 🔄 Architecture & Workflow
-
-The automated pipeline consists of three Python scripts working sequentially:
-
-[-Step-1-]---------------------[-Step-2-]-------------------------------------[-Step-3-]
-
-┌──────────────┐-WAFER.json-┌────────────────────────┐-WAFER_numbered.json-┌──────────────┐
-│-Original-GDS-│-─────────►-│--Hybrid-Numbering-Core-│-──────────────────►-│-JSON-to-GDS--│-──►-Numbered-GDS
-└──────────────┘------------└────────────────────────┘---------------------└──────────────┘
-gds_to_json.py--------------probe_hybrid_numbering.py----------------------json_to_gds.py
-(ver.-1.1.4)----------------(ver.-1.0.9)-----------------------------------(ver.1.3.2)
-
-
-1. **`gds_to_json.py`**: Translates binary GDSII data into a structured, highly compatible JSON hierarchical tree dictionary.
-2. **`probe_hybrid_numbering.py`**: The geometric solver core. It extracts deep nested layers, resolves orientation/scale matrices, flushes out old placeholders globally, and injects unique serial numbers into the `WAFER` cell.
-3. **`json_to_gds.py`**: Reconstructs the modified JSON structure back into a standard physical GDSII file using the KLayout C++ core (`pya`).
+An industrial-grade semiconductor layout post-processing pipeline designed to inject unique serialized IDs into multi-channel 3D neural probes on integrated wafers. Powered entirely by the **KLayout (`pya`) C++ geometry engine**, this architecture completely eliminates older `gdspy` parsing bugs, providing absolute precision for complex, staggered, or non-orthogonal micro-electromechanical systems (MEMS) arrays.
 
 ---
 
-## 📦 Script Detailed Specifications
+## 🚀 Quick Start: Run Instantly on Google Colab (Recommended)
 
-### 1. `gds_to_json.py` (ver. 1.1.4)
-* **Layer Whitelist**: Filters out >90% of layout data (dense routing, dummy fills) at source.
-* **Big Matrix**: Aggregates all vertices of a layer into a single flat array, bypassing dictionary overhead to prevent `MemoryError`.
-* **Namespace Prefix**: Automatically prefixes merged shapes with `{cell.name}` to eliminate cell name collisions during GDS reconstruction.
+You can run the entire wafer layout processing stream directly in the cloud without configuring a local Python or EDA environment. 
 
-### 2. `probe_hybrid_numbering.py` (ver. 1.0.9)
-* **Depth Recursive Sweep**: Traverses multi-level subcell branching to capture Layer 81 & 100 regardless of nesting depth.
-* **Matrix Composition**: Accumulates grid array (AREF) transformations and original custom placeholder tilts, ensuring 100% accurate angle alignment and sizing.
-* **Global Flush**: Erases Layer 100 shapes globally across all subcells to eliminate KLayout C++ cache pollution and stale artifacts.
-* **Independent Numbering**: Groups probes by direct subcell variant name (e.g., `_v2`, `_v3`) and indexes them (1, 2, 3...) sorted top-to-bottom, left-to-right.
+### 1. Launch the Pipeline
+Click the link below or load the script inside your Jupyter workspace:
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com)
 
-### 3. `json_to_gds.py` (ver. 1.3.2)
-* **Dual-Format Support**: Handles both legacy singular `self_shape` and optimized `self_shapes` big matrix array lists.
-* **Complex Transformations**: Maps orientation and scaling parameters seamlessly into KLayout `pya.DCplxTrans`.
+### 2. Runtime Execution Flow
+1. **Initialize Environment:** Run **Step 0** to provision the cloud virtual machine and pull the native `klayout` package.
+2. **Upload GDSII Layout:** The system will dynamically prompt an upload interface. Select your master raw wafer layout (e.g., `Circle_nubering_tet.GDS` or `Probes_test.GDS`).
+3. **Automated Run:** The pipeline parses geometry boundaries, removes legacy indicators, calculates structural cascade orientations, and generates layout-aligned serial polygons.
+4. **Dynamic Output Stream:** Once processing completes, your browser will automatically trigger a browser download for the compiled physical stream-out file: `WAFER_numbered.gds`.
 
 ---
 
-## 🛠️ Data Structure Schema Changes
+## 🛠️ Monolithic Process Flow Architecture
 
-* **Legacy Format**:
-    ```json
-    "poly_81_0_0_instance": {
-      "definition": { "name": "poly_81_0_0", "self_shape": [[x1, y1], [x2, y2], ...] },
-      "instances": [{"origin": [0.0, 0.0], "rotation": 0.0}]
-    }
-    ```
-* **Optimized Big Matrix Format (ver. 1.1.3+)**:
-    ```json
-    "CellName_merged_polys_81_0_instance": {
-      "definition": {
-        "name": "CellName_merged_polys_81_0",
-        "self_shapes": [
-          [[x1, y1], [x2, y2], ...],  // Polygon 1
-          [[x5, y5], [x6, y6], ...]   // Polygon 2 (Stored in flat array)
-        ]
-      },
-      "instances": [{"origin": [0.0, 0.0], "rotation": 0.0, "mirror": false, "magnification": 1.0}]
-    }
-    ```
+The pipeline decouples raw geometric matrix computation from serialization mapping by bridging an intermediate hierarchical JSON layer:
+
+[Master GDSII File]
+│
+▼ (Phase 1)
+┌────────────────────────────────────────────────────────┐
+│  CORE MODULE 1: Pure KLayout Extraction                │
+│  - Parses absolute vectors (inst.na/nb/a/b)            │
+│  - Dissolves 10,000µm array staggering limitations     │
+└────────────────────────────────────────────────────────┘
+│
+▼ [WAFER.json]
+┌────────────────────────────────────────────────────────┐
+│  CORE MODULE 2: Hybrid Cascaded Numbering Engine       │
+│  - Traces deep structural accumulative transforms      │
+│  - Multi-mode Sort: CARTESIAN (Binning) or RADIAL     │
+│  - Generates exact tilt/height-aligned 7-segment paths │
+└────────────────────────────────────────────────────────┘
+│
+▼ [WAFER_numbered.json]
+┌────────────────────────────────────────────────────────┐
+│  CORE MODULE 3: GDSII Native Compilation               │
+│  - Spawns unique vector instances per probe index      │
+│  - Maps serial text strictly to Layer 100 Datatype 0   │
+│  - Executes native complex transforms (pya.DCplxTrans) │
+└────────────────────────────────────────────────────────┘
+│
+▼ (Phase 4)
+[WAFER_numbered.gds]
+
 
 ---
 
-## 🚀 Execution & Configuration
+## 💎 Key Upgrades over Legacy Frameworks
 
-### 1. Prerequisites
-Dependencies: `gdspy`, `klayout` (Python module `pya`), `numpy`, `matplotlib`.
+* **Pure KLayout Database Engine Integration:** Replaced the legacy `gdspy` parsing infrastructure. Complex array step vectors—such as the asymmetric $10,000\,\mu\text{m}$ Y-axis stagger found in advanced cable routings—are resolved natively with zero data loss or cell overlapping.
+* **Database Unit (DBU) Domain Precision:** Coordinates are processed within KLayout's native integer DBU domain ($1\,\text{DBU} = 1\,\text{nm}$). This eliminates floating-point summation truncations, entirely preventing layout skips or chaotic row misalignments during Cartesian serialization.
+* **Perfect Multi-Level Transformation Algebra:** Leverages native `pya.DCplxTrans` matrix multiplication for deep traversal parsing. This ensures that spatial orientations, scaling factors, and multi-level nested mirror states match the CAD layout identically, preventing inverted text or misplaced geometries.
 
-### 2. Running the Pipeline
-Execute the scripts in this exact order:
-```bash
-runfile('gds_to_json.py')            # Step 1: Parse & screen GDS to JSON
-runfile('probe_hybrid_numbering.py') # Step 2: Purge placeholders & inject numbers
-runfile('json_to_gds.py')            # Step 3: Rebuild JSON back to standard GDSII
-```
+---
 
-### 3. Layer Configuration Maps
-The system default layer whitelist is configured inside the gds_to_json.py main block:
-allowed_layers = [(11, 0), (92, 0), (81, 0), (99, 0), (4, 0), (100, 0)]
+## 🎛️ Control Panel Configurations
 
-Layer 81: Probe physical contour/boundary layer (used for height analysis and model classification).
+Global variables can be modified directly within the execution module block to match your specific cleanroom requirements:
 
-Layer 100: Pre-tilted letter "O" placeholder layer.
+| Parameter | Type | Default Value | Description |
+| :--- | :--- | :--- | :--- |
+| `target_cell_name` | String | `"WAFER"` | The root top-level cell identifier inside the GDS file. |
+| `CHOSEN_SORT_MODE` | String | `"CARTESIAN"` | Sequencing logic: `"CARTESIAN"` (Top-to-Bottom, Left-to-Right) or `"RADIAL"` (12 o'clock clockwise spiral). |
+| `WAFER_CENTER_COORDS`| Tuple | `(0.0, 0.0)` | Global origin reference point utilized during Polar/Radial mapping calculations. |
+| `allowed_layers` | List | `[(11,0), (92,0), (81,0)...]`| Active lithography masks passed into memory during the data minimization phase. |
 
-Generated physical text polygons overwrite Layer 100:0 at the top level.
+---
 
+## 🔬 Target Production Mapping Specification
+* **Text / Serial Insertion Boundary:** Routed strictly to **Layer 100, Datatype 0 (100/0)**.
+* **Localized Purge:** Automatically scans for and erases old Layer 100 indicator rectangles (`O` marker cells) from individual probe cells without mutating other base fabrication arrays.
+* **Dynamic Font Scaling:** Font heights are bound algorithmically to the target probe's bounding dimensions.
 
+---
+*For technical inquiries or pipeline adjustments, please review the latest ver. 1.9.0 architect
