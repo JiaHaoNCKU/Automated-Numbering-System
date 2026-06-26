@@ -10,7 +10,7 @@ You can run the entire wafer layout processing stream directly in the cloud with
 
 ### 1. Launch the Pipeline
 Click the link below or load the script inside your Jupyter workspace:
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JiaHaoNCKU/Automated-Numbering-System/blob/main/main/ANS.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JiaHaoNCKU/Automated-Numbering-System/blob/main/ANS.ipynb)
 
 ### 2. Runtime Execution Flow
 1. Configure Parameters : Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
@@ -44,29 +44,43 @@ The pipeline decouples raw geometric matrix computation from serialization mappi
 │
 ▼ (Phase 1)
 ┌────────────────────────────────────────────────────────┐
+
 │  CORE MODULE 1: Pure KLayout Extraction                │
+
 │  - Parses absolute vectors (inst.na/nb/a/b)            │
+
 │  - Dissolves 10,000µm array staggering limitations     │
+
 └────────────────────────────────────────────────────────┘
 
 │
 
 ▼ [WAFER.json]
 ┌────────────────────────────────────────────────────────┐
+
 │  CORE MODULE 2: Hybrid Cascaded Numbering Engine       │
+
 │  - Traces deep structural accumulative transforms      │
+
 │  - Multi-mode Sort: CARTESIAN (Binning) or RADIAL      │
+
 │  - Generates exact tilt/height-aligned 7-segment paths │
+
 └────────────────────────────────────────────────────────┘
 
 │
 
 ▼ [WAFER_numbered.json]
 ┌────────────────────────────────────────────────────────┐
+
 │  CORE MODULE 3: GDSII Native Compilation               │
+
 │  - Spawns unique vector instances per probe index      │
+
 │  - Maps serial text strictly to Layer 100 Datatype 0   │
+
 │  - Executes native complex transforms (pya.DCplxTrans) │
+
 └────────────────────────────────────────────────────────┘
 
 │
