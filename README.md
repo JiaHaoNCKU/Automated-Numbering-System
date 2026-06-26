@@ -13,13 +13,13 @@ Click the link below or load the script inside your Jupyter workspace:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JiaHaoNCKU/Automated-Numbering-System/blob/main/main/ANS.ipynb)
 
 ### 2. Runtime Execution Flow
-1.** Configure Parameters **: Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
+1. Configure Parameters : Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
 
-2.** Step 0 (Setup) **: Run the first cell to initialize the virtual machine and install the native klayout engine.
+2. Step 0 (Setup) : Run the first cell to initialize the virtual machine and install the native klayout engine.
 
-3.** Upload GDS **: Choose and upload your raw GDSII file (e.g., Probes_test.GDS) when the interactive prompt appears.
+3. Upload GDS : Choose and upload your raw GDSII file (e.g., Probes_test.GDS) when the interactive prompt appears.
 
-4.** Auto-Process & Download **: The pipeline clears legacy indicators, generates new serialized polygons, and automatically triggers a browser download for WAFER_numbered.gds.
+4. Auto-Process & Download : The pipeline clears legacy indicators, generates new serialized polygons, and automatically triggers a browser download for WAFER_numbered.gds.
 
 ---
 
@@ -48,7 +48,9 @@ The pipeline decouples raw geometric matrix computation from serialization mappi
 │  - Parses absolute vectors (inst.na/nb/a/b)            │
 │  - Dissolves 10,000µm array staggering limitations     │
 └────────────────────────────────────────────────────────┘
+
 │
+
 ▼ [WAFER.json]
 ┌────────────────────────────────────────────────────────┐
 │  CORE MODULE 2: Hybrid Cascaded Numbering Engine       │
@@ -56,7 +58,9 @@ The pipeline decouples raw geometric matrix computation from serialization mappi
 │  - Multi-mode Sort: CARTESIAN (Binning) or RADIAL      │
 │  - Generates exact tilt/height-aligned 7-segment paths │
 └────────────────────────────────────────────────────────┘
+
 │
+
 ▼ [WAFER_numbered.json]
 ┌────────────────────────────────────────────────────────┐
 │  CORE MODULE 3: GDSII Native Compilation               │
@@ -64,7 +68,9 @@ The pipeline decouples raw geometric matrix computation from serialization mappi
 │  - Maps serial text strictly to Layer 100 Datatype 0   │
 │  - Executes native complex transforms (pya.DCplxTrans) │
 └────────────────────────────────────────────────────────┘
+
 │
+
 ▼ (Phase 4)
 [WAFER_numbered.gds]
 
