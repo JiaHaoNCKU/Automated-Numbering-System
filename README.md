@@ -1,7 +1,10 @@
 # Automated Wafer Numbering System (ver. 1.9.0)
 
-An layout post-processing pipeline designed to inject unique serialized IDs into multi-channel 3D neural probes on integrated wafers. Powered entirely by the **KLayout (`pya`) C++ geometry engine**, this architecture completely eliminates older `gdspy` parsing bugs, providing absolute precision for complex, staggered, or non-orthogonal micro-electromechanical systems (MEMS) arrays.
+An layout post-processing pipeline designed to inject unique serialized IDs into designs on integrated wafers. 
 
+Powered entirely by the KLayout (pya) C++ geometry engine to eliminate legacy gdspy parsing bugs, this architecture utilizes Layer 100 geometries as spatial localization and identification anchors to trace, track, and execute a localized purge of legacy indicator marks with domain-level accuracy 
+The system features multi-mode geometric serialization, sorting dense arrays via traditional Cartesian binning or a radial 12 o'clock clockwise spiral mapping. 
+These computed coordinates undergo dynamic font translation, mapping serial IDs into 7-segment path polygons that scale automatically to localized cell dimensions.
 ---
 
 ## 🚀 Quick Start: Run Instantly on Google Colab (Recommended)
@@ -15,7 +18,7 @@ Click the link below or load the script inside your Jupyter workspace:
 ### 2. Runtime Execution Flow
 1. Configure Parameters : Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
 
-2. Step 0 (Setup) : Run the first cell to initialize the virtual machine and install the native klayout engine.
+2. Run : Run the first cell to initialize the virtual machine and install the native klayout engine.
 
 3. Upload GDS : Choose and upload your raw GDSII file (e.g., Probes_test.GDS) when the interactive prompt appears.
 
@@ -45,41 +48,43 @@ The pipeline decouples raw geometric matrix computation from serialization mappi
 ▼ (Phase 1)
 ┌────────────────────────────────────────────────────────┐
 
-│  CORE MODULE 1: Pure KLayout Extraction                │
+│  CORE MODULE 1: Pure KLayout Extraction                
 
-│  - Parses absolute vectors (inst.na/nb/a/b)            │
+│  - Parses absolute vectors (inst.na/nb/a/b)            
 
-│  - Dissolves 10,000µm array staggering limitations     │
+│  - Dissolves 10,000µm array staggering limitations     
 
 └────────────────────────────────────────────────────────┘
 
 │
 
 ▼ [WAFER.json]
+
 ┌────────────────────────────────────────────────────────┐
 
-│  CORE MODULE 2: Hybrid Cascaded Numbering Engine       │
+│  CORE MODULE 2: Hybrid Cascaded Numbering Engine       
 
-│  - Traces deep structural accumulative transforms      │
+│  - Traces deep structural accumulative transforms      
 
-│  - Multi-mode Sort: CARTESIAN (Binning) or RADIAL      │
+│  - Multi-mode Sort: CARTESIAN (Binning) or RADIAL      
 
-│  - Generates exact tilt/height-aligned 7-segment paths │
+│  - Generates exact tilt/height-aligned 7-segment paths 
 
 └────────────────────────────────────────────────────────┘
 
 │
 
 ▼ [WAFER_numbered.json]
+
 ┌────────────────────────────────────────────────────────┐
 
-│  CORE MODULE 3: GDSII Native Compilation               │
+│  CORE MODULE 3: GDSII Native Compilation               
 
-│  - Spawns unique vector instances per probe index      │
+│  - Spawns unique vector instances per probe index      
 
-│  - Maps serial text strictly to Layer 100 Datatype 0   │
+│  - Maps serial text strictly to Layer 100 Datatype 0   
 
-│  - Executes native complex transforms (pya.DCplxTrans) │
+│  - Executes native complex transforms (pya.DCplxTrans) 
 
 └────────────────────────────────────────────────────────┘
 
