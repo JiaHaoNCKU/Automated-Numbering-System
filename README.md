@@ -1,10 +1,8 @@
 # Automated Wafer Numbering System (ver. 1.9.0)
 
-An layout post-processing pipeline designed to inject unique serialized IDs into designs on integrated wafers. 
+An layout pipeline designed to inject unique serialized IDs into designs on integrated wafers.
 
-Powered entirely by the KLayout (pya) C++ geometry engine to eliminate legacy gdspy parsing bugs, this architecture utilizes Layer 100 geometries as spatial localization and identification anchors to trace, track, and execute a localized purge of legacy indicator marks with domain-level accuracy 
-The system features multi-mode geometric serialization, sorting dense arrays via traditional Cartesian binning or a radial 12 o'clock clockwise spiral mapping. 
-These computed coordinates undergo dynamic font translation, mapping serial IDs into 7-segment path polygons that scale automatically to localized cell dimensions.
+Powered entirely by the KLayout (pya) C++ geometry engine to eliminate legacy gdspy bugs, this architecture utilizes Layer 100 geometries as spatial localization and identification anchors to trace, track, and execute a localized purge of legacy indicator marks with domain-level accuracy. The system features multi-mode geometric serialization, sorting dense arrays via Cartesian binning or radial 12 o'clock clockwise spiral mapping. These computed coordinates undergo dynamic font translation, mapping serial IDs into 7-segment path polygons that scale automatically to localized cell dimensions.
 
 ---
 
