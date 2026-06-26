@@ -1,8 +1,11 @@
 # Automated Wafer Numbering System (ver. 1.9.0)
 
-An layout post-processing pipeline designed to inject unique serialized IDs into designs on integrated wafers. Powered entirely by the KLayout (pya) C++ geometry engine to eliminate legacy gdspy parsing bugs, this architecture utilizes Layer 100 geometries as spatial localization and identification anchors to trace, track, and execute a localized purge of legacy indicator marks with domain-level accuracy 
+An layout post-processing pipeline designed to inject unique serialized IDs into designs on integrated wafers. 
+
+Powered entirely by the KLayout (pya) C++ geometry engine to eliminate legacy gdspy parsing bugs, this architecture utilizes Layer 100 geometries as spatial localization and identification anchors to trace, track, and execute a localized purge of legacy indicator marks with domain-level accuracy 
 The system features multi-mode geometric serialization, sorting dense arrays via traditional Cartesian binning or a radial 12 o'clock clockwise spiral mapping. 
 These computed coordinates undergo dynamic font translation, mapping serial IDs into 7-segment path polygons that scale automatically to localized cell dimensions.
+
 ---
 
 ## 🚀 Quick Start: Run Instantly on Google Colab (Recommended)
@@ -14,13 +17,13 @@ Click the link below or load the script inside your Jupyter workspace:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JiaHaoNCKU/Automated-Numbering-System/blob/main/ANS.ipynb)
 
 ### 2. Runtime Execution Flow
-1. Configure Parameters : Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
+1. **Configure Parameters** : Modify target_cell_name or CHOSEN_SORT_MODE in the __main__ block if your design requires custom settings.
 
-2. Run : Run the first cell to initialize the virtual machine and install the native klayout engine.
+2. **Run** : Run the first cell to initialize the virtual machine and install the native klayout engine.
 
-3. Upload GDS : Choose and upload your raw GDSII file (e.g., Probes_test.GDS) when the interactive prompt appears.
+3. **Upload GDS** : Choose and upload your raw GDSII file (e.g., Probes_test.GDS) when the interactive prompt appears.
 
-4. Auto-Process & Download : The pipeline clears legacy indicators, generates new serialized polygons, and automatically triggers a browser download for WAFER_numbered.gds.
+4. **Auto-Process & Download** : The pipeline clears legacy indicators, generates new serialized polygons, and automatically triggers a browser download for WAFER_numbered.gds.
 
 ---
 
