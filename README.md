@@ -1,4 +1,4 @@
-# Automated Wafer Numbering System (ver. 1.9.0)
+# Automated Wafer Numbering System (ver. 1.9.5)
 
 An layout pipeline designed to inject unique serialized IDs into designs on integrated wafers.
 
